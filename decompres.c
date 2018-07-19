@@ -1,5 +1,6 @@
 /* Compresión de archivos usando el Algoritmo de Huffman: */
 /* (C) Noviembre de 2000 Salvador Pozo Coronado           */
+/* (C) Noviembre de 2018 Mariano Ruiz (correcciones)      */
 /* Descompresor */
 
 #include <stdio.h>
@@ -8,7 +9,7 @@
 /* Tipo nodo para árbol */
 typedef struct _nodo
 {
-   char letra;                    /* Letra a la que hace referencia el nodo */
+   unsigned char letra;           /* Letra a la que hace referencia el nodo */
    unsigned long int bits;        /* Valor de la codificación de la letra */
    char nbits;                    /* Número de bits de la codificación */
    struct _nodo *cero;            /* Puntero a la rama cero de un árbol */

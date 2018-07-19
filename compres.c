@@ -1,5 +1,6 @@
 /* Compresión de archivos usando el Algoritmo de Huffman: */
 /* (C) Noviembre de 2000 Salvador Pozo Coronado           */
+/* (C) Noviembre de 2018 Mariano Ruiz (correcciones)      */
 /* Compresor                                              */
 
 #include <stdio.h>
@@ -11,7 +12,7 @@
 /* se usan los punteros cero y uno */
 typedef struct _nodo
 {
-   char letra;             /* Letra a la que hace referencia el nodo */
+   unsigned char letra;    /* Letra a la que hace referencia el nodo */
    int frecuencia;         /* veces que aparece la letra en el texto o las letras */
                            /* de los nodos de las ramas cero y uno */
    struct _nodo *sig;      /* Puntero a siguiente nodo de una lista enlazada */
@@ -22,9 +23,9 @@ typedef struct _nodo
 /* Nodo para construir una lista para la tabla de codigos */
 typedef struct _tabla
 {
-   char letra;             /* Letra a la que hace referencia el nodo */
+   unsigned char letra;    /* Letra a la que hace referencia el nodo */
    unsigned long int bits; /* Valor de la codificación de la letra */
-   char nbits;             /* Número de bits de la codificación */
+   unsigned char nbits;    /* Número de bits de la codificación */
    struct _tabla *sig;     /* Siguiente elemento de la tabla */
 } tipoTabla;               /* Nombre del tipo */
 
@@ -32,13 +33,13 @@ typedef struct _tabla
 tipoTabla *Tabla;
 
 /* Prototipos */
-void Cuenta(tipoNodo** Lista, char c);
+void Cuenta(tipoNodo** Lista, unsigned char c);
 void Ordenar(tipoNodo** Lista);
 void InsertarOrden(tipoNodo** Cabeza, tipoNodo *e);
 void BorrarArbol(tipoNodo *n);
 void CrearTabla(tipoNodo *n, int l, int v);
-void InsertarTabla(char c, int l, int v);
-tipoTabla *BuscaCaracter(tipoTabla *Tabla, char c);
+void InsertarTabla(unsigned char c, int l, int v);
+tipoTabla *BuscaCaracter(tipoTabla *Tabla, unsigned char c);
 
 int main(int argc, char *argv[])
 {
@@ -46,7 +47,7 @@ int main(int argc, char *argv[])
    tipoNodo *Arbol;       /* Arbol de letras y frecuencias */
 
    FILE *fe, *fs;         /* Ficheros de entrada y salida */
-   char c;                /* variables auxiliares */
+   unsigned char c;       /* variables auxiliares */
    tipoNodo *p;
    tipoTabla *t;
    int nElementos;        /* Número de elementos en tabla */
@@ -69,7 +70,7 @@ int main(int argc, char *argv[])
       if( feof(fe) ) {
          break ;
       }
-      Longitud++;       /* Actualiza la cuenta de la longitud del fichero */
+      Longitud++;        /* Actualiza la cuenta de la longitud del fichero */
       Cuenta(&Lista, c); /* Actualiza la lista de frecuencias */
    } while(1);
    fclose(fe);
@@ -172,7 +173,7 @@ int main(int argc, char *argv[])
 /* El puntero a Lista se pasa por referencia, ya que debe poder cambiar */
 /* Ya sea por que la lista esté vacía, o porque el nuevo elemento sea el */
 /* primero */
-void Cuenta(tipoNodo** Lista, char c)
+void Cuenta(tipoNodo** Lista, unsigned char c)
 {
    tipoNodo *p, *a, *q;
 
@@ -266,7 +267,7 @@ void CrearTabla(tipoNodo *n, int l, int v)
 }
 
 /* Insertar un elemento en la tabla */
-void InsertarTabla(char c, int l, int v)
+void InsertarTabla(unsigned char c, int l, int v)
 {
    tipoTabla *t, *p, *a;
 
@@ -298,7 +299,7 @@ void InsertarTabla(char c, int l, int v)
 }
 
 /* Buscar un caracter en la tabla, devielve un puntero al elemento de la tabla */
-tipoTabla *BuscaCaracter(tipoTabla *Tabla, char c)
+tipoTabla *BuscaCaracter(tipoTabla *Tabla, unsigned char c)
 {
    tipoTabla *t;
 
