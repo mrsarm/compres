@@ -64,11 +64,14 @@ int main(int argc, char *argv[])
    Lista = NULL;
    /* Fase 1: contar frecuencias */
    fe = fopen(argv[1], "r");
-   while((c = fgetc(fe)) != EOF)
-   {
+   do {
+      c = fgetc(fe);
+      if( feof(fe) ) {
+         break ;
+      }
       Longitud++;       /* Actualiza la cuenta de la longitud del fichero */
       Cuenta(&Lista, c); /* Actualiza la lista de frecuencias */
-   }
+   } while(1);
    fclose(fe);
 
    /* Ordenar la lista de menor a mayor */
@@ -121,8 +124,11 @@ int main(int argc, char *argv[])
    fe = fopen(argv[1], "r");
    dWORD = 0; /* Valor inicial. */
    nBits = 0; /* Ningún bit */
-   while((c = fgetc(fe)) != EOF)
-   {
+   do {
+      c = fgetc(fe);
+      if( feof(fe) ) {
+         break ;
+      }
       /* Busca c en tabla: */
       t = BuscaCaracter(Tabla, c);
       /* Si nBits + t->nbits > 32, sacar un byte */
@@ -135,7 +141,7 @@ int main(int argc, char *argv[])
       dWORD <<= t->nbits; /* Hacemos sitio para el nuevo caracter */
       dWORD |= t->bits;   /* Insertamos el nuevo caracter */
       nBits += t->nbits;  /* Actualizamos la cuenta de bits */
-   }
+   } while(1);
    /* Extraer los cuatro bytes que quedan en dWORD*/
    while(nBits>0)
    {
