@@ -35,6 +35,8 @@ tipoTabla *Tabla;
 /* Prototipos */
 void Cuenta(tipoNodo** Lista, unsigned char c);
 void Ordenar(tipoNodo** Lista);
+void ImprimirLista(tipoNodo* Lista);
+void ImprimirTabla(tipoTabla *Tabla);
 void InsertarOrden(tipoNodo** Cabeza, tipoNodo *e);
 void BorrarArbol(tipoNodo *n);
 void CrearTabla(tipoNodo *n, int l, int v);
@@ -77,6 +79,7 @@ int main(int argc, char *argv[])
 
    /* Ordenar la lista de menor a mayor */
    Ordenar(&Lista);
+   ImprimirLista(Lista);
 
    /* Crear el arbol */
    Arbol = Lista;
@@ -120,6 +123,8 @@ int main(int argc, char *argv[])
       fwrite(&t->nbits, sizeof(char), 1, fs);
       t = t->sig;
    }
+   fprintf(stderr, "\n");
+   ImprimirTabla(Tabla);
 
    /* Codificación del fichero de entrada */
    fe = fopen(argv[1], "r");
@@ -229,6 +234,45 @@ void Ordenar(tipoNodo** Lista)
    }
 }
 
+void ImprimirLista(tipoNodo* Lista) {
+    fprintf(stderr, "Tabla Frecuencias\n");
+    fprintf(stderr, "------------------------------------\n");
+    int i = 0, size = 0;
+    while(Lista)
+    {
+        fprintf(stderr, "Symb.: '%c' %02X   Freq.: %i\tPos.: %2X\n",
+               (Lista->letra < 0x7F && Lista->letra >= 0x20) ? Lista->letra : '.',
+               Lista->letra,
+               Lista->frecuencia,
+               i++);
+        size += Lista->frecuencia;
+        Lista = Lista->sig;
+    }
+    fprintf(stderr, "\n> Núm símbolos: %i, Tamaño archivo: %i bytes\n", i, size);
+}
+
+void ImprimirBinario(unsigned long int bits, unsigned char nbits)
+{
+    while(nbits--) {
+        char c = '0' + ((bits >> nbits) & 1);
+        fputc(c, stderr);
+    }
+}
+
+void ImprimirTabla(tipoTabla *t) {
+    fprintf(stderr, "Tabla Codificación\n");
+    fprintf(stderr, "------------------------------------\n");
+    while(t) {
+        fprintf(stderr, "Symb.: '%c' %02X   Bits: %i\tCod.: ",
+                (t->letra < 0x7F && t->letra >= 0x20) ? t->letra : '.',
+                t->letra,
+                t->nbits);
+        ImprimirBinario(t->bits, t->nbits);
+        fprintf(stderr, "\n");
+        t = t->sig;
+    }
+}
+
 /* Inserta el elemento e en la Lista ordenado por frecuencia de menor a mayor */
 /* El puntero a Cabeza se pasa por referencia */
 void InsertarOrden(tipoNodo** Cabeza, tipoNodo *e)
@@ -263,6 +307,8 @@ void CrearTabla(tipoNodo *n, int l, int v)
 {
    if(n->uno)  CrearTabla(n->uno, l+1, (v<<1)|1);
    if(n->cero) CrearTabla(n->cero, l+1, v<<1);
+//    if(n->cero) CrearTabla(n->cero, l+1, v<<1|1);
+//    if(n->uno)  CrearTabla(n->uno, l+1, (v<<1));
    if(!n->uno && !n->cero) InsertarTabla(n->letra, l, v);
 }
 
