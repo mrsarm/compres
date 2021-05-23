@@ -7,17 +7,18 @@ con mínimas correcciones de Mariano Ruiz (2018).
 
 
 Código fuente original en C++:
-http://articulos.conclase.net/?tema=algoritmos&art=huffman&pag=000
+[link original (roto)](http://articulos.conclase.net/?tema=algoritmos&art=huffman&pag=000),
+[web archive](https://web.archive.org/web/20190912232030/http://articulos.conclase.net/?tema=algoritmos&art=huffman&pag=000).
 
 ### Cambios en esta versión:
 
 - Código fue portado a C: mínimos cambios ya que el código original
-  no hacía uso de programación orientada a objetos, pero hacía uso
-  de referencias que no son compatibles con C.
+  en C++ no hacía uso de programación orientada a objetos, pero hacía
+  uso de referencias que no son compatibles con C.
 - Fix error en cómo se leía el archivo que causaba que no
   se pudiera usar para comprimir archivos binarios o con más
   de 128 caracteres diferentes.
-- Archivos re-encodeados a UTF-8 en vez del viejo
+- Archivos fuentes re-encodeados a UTF-8 en vez del viejo
   encoding ASCII _ISO-8859-1_, que hacía in-leíble los comentarios
   con caracteres diacríticos en cualquier editor moderno.
 - También se agrega script para compilar con **CMake** ambos
