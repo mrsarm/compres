@@ -273,7 +273,7 @@ void ImprimirBinario(unsigned long int bits, unsigned char nbits)
  * usado en la codificación */
 void ImprimirTabla(tipoTabla *t) {
     while(t) {
-        fprintf(stderr, "Symb.: '%c' %02X   Bits: %i\tCod.: ",
+        fprintf(stderr, "Symb.: '%c' %02X    Bits: %2i    Cod.: ",
                 (t->letra < 0x7F && t->letra >= 0x20) ? t->letra : '.',
                 t->letra,
                 t->nbits);
