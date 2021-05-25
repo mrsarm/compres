@@ -37,6 +37,7 @@ void Cuenta(tipoNodo** Lista, unsigned char c);
 void Ordenar(tipoNodo** Lista);
 void ImprimirLista(tipoNodo* Lista);
 void ImprimirTabla(tipoTabla *Tabla);
+void ImprimirArbol(tipoNodo* Lista, tipoTabla *t);
 void InsertarOrden(tipoNodo** Cabeza, tipoNodo *e);
 void BorrarArbol(tipoNodo *n);
 void CrearTabla(tipoNodo *n, int l, int v);
@@ -79,6 +80,9 @@ int main(int argc, char *argv[])
 
    /* Ordenar la lista de menor a mayor */
    Ordenar(&Lista);
+
+   fprintf(stderr, "Tabla Frecuencias\n");
+   fprintf(stderr, "------------------------------------\n");
    ImprimirLista(Lista);
 
    /* Crear el arbol */
@@ -123,7 +127,8 @@ int main(int argc, char *argv[])
       fwrite(&t->nbits, sizeof(char), 1, fs);
       t = t->sig;
    }
-   fprintf(stderr, "\n");
+   fprintf(stderr, "\nTabla Codificación\n");
+   fprintf(stderr, "------------------------------------\n");
    ImprimirTabla(Tabla);
 
    /* Codificación del fichero de entrada */
@@ -156,6 +161,10 @@ int main(int argc, char *argv[])
       fwrite(&c, sizeof(char), 1, fs);
       nBits -= 8;
    }
+
+   fprintf(stderr, "\nArbol binario\n");
+   fprintf(stderr, "------------------------------------\n");
+   ImprimirArbol(Arbol, Tabla);
 
    fclose(fe);  /* Cierra los ficheros */
    fclose(fs);
@@ -234,9 +243,9 @@ void Ordenar(tipoNodo** Lista)
    }
 }
 
+
+/* Imprime la tabla de frecuencias en stderr */
 void ImprimirLista(tipoNodo* Lista) {
-    fprintf(stderr, "Tabla Frecuencias\n");
-    fprintf(stderr, "------------------------------------\n");
     int i = 0, size = 0;
     while(Lista)
     {
@@ -251,6 +260,7 @@ void ImprimirLista(tipoNodo* Lista) {
     fprintf(stderr, "\n> Núm símbolos: %i, Tamaño archivo: %i bytes\n", i, size);
 }
 
+/* Imprime el código binario de bits en stderr */
 void ImprimirBinario(unsigned long int bits, unsigned char nbits)
 {
     while(nbits--) {
@@ -259,9 +269,9 @@ void ImprimirBinario(unsigned long int bits, unsigned char nbits)
     }
 }
 
+/* Imprime la tabla de caracteres con los bits y el código binario
+ * usado en la codificación */
 void ImprimirTabla(tipoTabla *t) {
-    fprintf(stderr, "Tabla Codificación\n");
-    fprintf(stderr, "------------------------------------\n");
     while(t) {
         fprintf(stderr, "Symb.: '%c' %02X   Bits: %i\tCod.: ",
                 (t->letra < 0x7F && t->letra >= 0x20) ? t->letra : '.',
@@ -270,6 +280,47 @@ void ImprimirTabla(tipoTabla *t) {
         ImprimirBinario(t->bits, t->nbits);
         fprintf(stderr, "\n");
         t = t->sig;
+    }
+}
+
+char depth[ 2056 ];
+int di;
+
+void Push( char c )
+{
+    depth[ di++ ] = ' ';
+    depth[ di++ ] = c;
+    depth[ di++ ] = ' ';
+    depth[ di++ ] = ' ';
+    depth[ di ] = 0;
+}
+
+void Pop( )
+{
+    depth[ di -= 4 ] = 0;
+}
+
+void ImprimirArbol(tipoNodo* Lista, tipoTabla *t) {
+    fprintf(stderr, "(%i)", Lista->frecuencia);
+    if (!Lista->cero && !Lista->uno) {
+        fprintf(stderr, " '%c' [%02X]",
+                (Lista->letra < 0x7F && Lista->letra >= 0x20) ? Lista->letra : '.',
+                Lista->letra);
+    }
+    fprintf(stderr, "\n");
+
+    if ( Lista->uno )
+    {
+        fprintf(stderr, "%s `--", depth);
+        Push('|');
+        ImprimirArbol(Lista->uno, t);
+        Pop();
+    }
+    if ( Lista->cero ) {
+        fprintf(stderr, "%s `--", depth);
+        Push(' ');
+        ImprimirArbol(Lista->cero, t);
+        Pop();
     }
 }
 
@@ -305,10 +356,10 @@ void InsertarOrden(tipoNodo** Cabeza, tipoNodo *e)
 /* Recorre el árbol cuya raiz es n y le asigna el código v de l bits */
 void CrearTabla(tipoNodo *n, int l, int v)
 {
-   if(n->uno)  CrearTabla(n->uno, l+1, (v<<1)|1);
-   if(n->cero) CrearTabla(n->cero, l+1, v<<1);
-//    if(n->cero) CrearTabla(n->cero, l+1, v<<1|1);
-//    if(n->uno)  CrearTabla(n->uno, l+1, (v<<1));
+//   if(n->uno)  CrearTabla(n->uno, l+1, (v<<1)|1);
+//   if(n->cero) CrearTabla(n->cero, l+1, v<<1);
+    if(n->cero) CrearTabla(n->cero, l+1, v<<1|1);
+    if(n->uno)  CrearTabla(n->uno, l+1, (v<<1));
    if(!n->uno && !n->cero) InsertarTabla(n->letra, l, v);
 }
 
