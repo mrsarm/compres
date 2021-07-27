@@ -1,6 +1,6 @@
 /* Compresión de archivos usando el Algoritmo de Huffman: */
 /* (C) Noviembre de 2000 Salvador Pozo Coronado           */
-/* (C) Noviembre de 2018 Mariano Ruiz (correcciones)      */
+/* (C) Noviembre de 2018-2021 Mariano Ruiz (correcciones) */
 /* Descompresor */
 
 #include <stdio.h>
