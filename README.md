@@ -37,6 +37,8 @@ solo con un compilador C como **gcc**:
     $ cc compres.c -o compres
     $ cc decompres.c -o decompres
 
+### Ejecución
+
 Una vez generados los ejecutables, para comprimir un archivo:
 
     $ ./compres hello.txt hello.txt.compres
