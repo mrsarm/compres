@@ -5,6 +5,12 @@ Compresión de archivos usando el Algoritmo de Huffman,
 código fuente original de Salvador Pozo Coronado (2000),
 con mínimas correcciones de Mariano Ruiz (2018-2021).
 
+> ℹ En el branch `modo-debug` está una version que agrega unas
+> funciones que imprimen en el error stream (consola)
+> la tabla de frecuencias, la codificación
+> Huffman usada, junto con una representación en
+> árbol binario (ver [modo-debug#Ejecución](https://github.com/mrsarm/compres/tree/modo-debug#ejecuci%C3%B3n)).
+
 
 Código fuente original en C++:
 [link original (roto)](http://articulos.conclase.net/?tema=algoritmos&art=huffman&pag=000),
