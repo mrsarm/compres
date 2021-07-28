@@ -37,7 +37,7 @@ void Cuenta(tipoNodo** Lista, unsigned char c);
 void Ordenar(tipoNodo** Lista);
 void ImprimirLista(tipoNodo* Lista);
 void ImprimirTabla(tipoTabla *Tabla);
-void ImprimirArbol(tipoNodo* Lista, tipoTabla *t);
+void ImprimirArbol(tipoNodo* Lista);
 void InsertarOrden(tipoNodo** Cabeza, tipoNodo *e);
 void BorrarArbol(tipoNodo *n);
 void CrearTabla(tipoNodo *n, int l, int v);
@@ -164,7 +164,7 @@ int main(int argc, char *argv[])
 
    fprintf(stderr, "\nArbol binario\n");
    fprintf(stderr, "------------------------------------\n");
-   ImprimirArbol(Arbol, Tabla);
+   ImprimirArbol(Arbol);
 
    fclose(fe);  /* Cierra los ficheros */
    fclose(fs);
@@ -300,7 +300,7 @@ void Pop( )
     depth[ di -= 4 ] = 0;
 }
 
-void ImprimirArbol(tipoNodo* Lista, tipoTabla *t) {
+void ImprimirArbol(tipoNodo* Lista) {
     fprintf(stderr, "(%i)", Lista->frecuencia);
     if (!Lista->cero && !Lista->uno) {
         fprintf(stderr, " '%c' [%02X]",
@@ -313,13 +313,13 @@ void ImprimirArbol(tipoNodo* Lista, tipoTabla *t) {
     {
         fprintf(stderr, "%s `--", depth);
         Push('|');
-        ImprimirArbol(Lista->uno, t);
+        ImprimirArbol(Lista->uno);
         Pop();
     }
     if ( Lista->cero ) {
         fprintf(stderr, "%s `--", depth);
         Push(' ');
-        ImprimirArbol(Lista->cero, t);
+        ImprimirArbol(Lista->cero);
         Pop();
     }
 }
